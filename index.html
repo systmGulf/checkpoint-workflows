@@ -1,1121 +1,1215 @@
+Checkpoint userflow · HTML
+Copy
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Check Point — Workflow Diagrams</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Check Point — User Flow Diagrams</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --navy: #0a1628;
-    --blue: #1a3a6b;
-    --mid: #2563eb;
-    --accent: #38bdf8;
-    --teal: #0d9488;
-    --green: #16a34a;
-    --amber: #d97706;
-    --red: #dc2626;
-    --white: #f0f6ff;
-    --glass: rgba(255,255,255,0.05);
-    --border: rgba(56,189,248,0.2);
-  }
+* { margin:0; padding:0; box-sizing:border-box; }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #f5f0e8;
+  --ink: #1a1a2e;
+  --c1: #ff4d6d;   /* red-pink */
+  --c2: #f77f00;   /* orange */
+  --c3: #fcbf49;   /* yellow */
+  --c4: #06d6a0;   /* teal */
+  --c5: #4361ee;   /* blue */
+  --c6: #7b2d8b;   /* purple */
+  --c7: #ef476f;   /* rose */
+  --c8: #118ab2;   /* sky */
+}
 
-  body {
-    background: var(--navy);
-    color: var(--white);
-    font-family: 'DM Sans', sans-serif;
-    overflow-x: hidden;
-    min-height: 100vh;
-  }
+body {
+  background: var(--bg);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-  /* Background grid */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(56,189,248,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(56,189,248,0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
-  }
+/* NOISE TEXTURE OVERLAY */
+body::after {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:0;
+  opacity:0.5;
+}
 
-  .wrapper { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
+/* HEADER */
+.header {
+  padding: 48px 48px 32px;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+  border-bottom: 4px solid var(--ink);
+}
 
-  /* HEADER */
-  header { text-align: center; margin-bottom: 64px; }
-  .logo-tag {
-    display: inline-block;
-    background: rgba(37,99,235,0.2);
-    border: 1px solid var(--mid);
-    color: var(--accent);
-    font-family: 'Syne', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    padding: 6px 18px;
-    border-radius: 100px;
-    margin-bottom: 24px;
-  }
-  h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(32px, 6vw, 60px);
-    font-weight: 800;
-    line-height: 1.05;
-    background: linear-gradient(135deg, #fff 0%, var(--accent) 60%, var(--teal) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 16px;
-  }
-  .subtitle {
-    color: rgba(240,246,255,0.5);
-    font-size: 16px;
-    font-weight: 300;
-    max-width: 500px;
-    margin: 0 auto;
-  }
+.header-left {}
 
-  /* NAV TABS */
-  .tabs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-    margin-bottom: 48px;
-  }
-  .tab {
-    background: var(--glass);
-    border: 1px solid var(--border);
-    color: rgba(240,246,255,0.55);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    padding: 8px 18px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .tab:hover { border-color: var(--accent); color: var(--accent); }
-  .tab.active {
-    background: rgba(37,99,235,0.25);
-    border-color: var(--mid);
-    color: #fff;
-  }
+.tag {
+  display: inline-block;
+  background: var(--ink);
+  color: var(--c3);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 13px;
+  letter-spacing: 3px;
+  padding: 4px 14px;
+  border-radius: 2px;
+  margin-bottom: 12px;
+}
 
-  /* WORKFLOW PANELS */
-  .panel { display: none; }
-  .panel.active { display: block; animation: fadeIn 0.3s ease; }
-  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 8vw, 96px);
+  line-height: 0.9;
+  color: var(--ink);
+  letter-spacing: 2px;
+}
 
-  .panel-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 22px;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 6px;
-  }
-  .panel-desc {
-    font-size: 14px;
-    color: rgba(240,246,255,0.5);
-    margin-bottom: 32px;
-    font-weight: 300;
-  }
+h1 span { color: var(--c1); }
 
-  /* FLOW DIAGRAM */
-  .flow {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    position: relative;
-  }
+.header-desc {
+  font-size: 14px;
+  color: rgba(26,26,46,0.55);
+  font-weight: 400;
+  max-width: 320px;
+  line-height: 1.6;
+  align-self: flex-end;
+}
 
-  .step {
-    display: flex;
-    align-items: flex-start;
-    gap: 20px;
-    position: relative;
-  }
+/* FLOW SELECTOR */
+.selector {
+  position: relative;
+  z-index: 2;
+  padding: 32px 48px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-bottom: 2px solid var(--ink);
+  background: var(--bg);
+}
 
-  .step-line {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-shrink: 0;
-    width: 44px;
-  }
+.flow-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  border: 2.5px solid var(--ink);
+  background: transparent;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: var(--ink);
+  position: relative;
+  overflow: hidden;
+}
 
-  .step-num {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 16px;
-    flex-shrink: 0;
-    position: relative;
-    z-index: 2;
-  }
+.flow-btn::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background: var(--clr);
+  transform: translateY(100%);
+  transition: transform 0.2s;
+  z-index: 0;
+}
 
-  .connector {
-    width: 2px;
-    flex: 1;
-    min-height: 28px;
-    background: linear-gradient(to bottom, var(--border), transparent);
-    margin: 0 auto;
-  }
+.flow-btn:hover::before,
+.flow-btn.active::before { transform: translateY(0); }
 
-  .step-body {
-    flex: 1;
-    padding-bottom: 28px;
-  }
+.flow-btn span, .flow-btn .btn-label { position: relative; z-index: 1; }
+.flow-btn .dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--clr);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  transition: background 0.2s;
+}
+.flow-btn.active .dot,
+.flow-btn:hover .dot { background: var(--ink); }
 
-  .step-card {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 20px;
-    transition: border-color 0.2s, background 0.2s;
-  }
-  .step-card:hover {
-    border-color: rgba(56,189,248,0.4);
-    background: rgba(255,255,255,0.07);
-  }
+/* MAIN DIAGRAM AREA */
+.diagram-area {
+  position: relative;
+  z-index: 2;
+  padding: 48px;
+  min-height: 600px;
+}
 
-  .step-label {
-    font-family: 'Syne', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: #fff;
-  }
-  .step-items {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-  .step-items li {
-    font-size: 13px;
-    color: rgba(240,246,255,0.65);
-    padding-left: 16px;
-    position: relative;
-    line-height: 1.5;
-    font-weight: 300;
-  }
-  .step-items li::before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: var(--accent);
-    opacity: 0.6;
-    font-size: 11px;
-    top: 1px;
-  }
+.flow-panel { display: none; }
+.flow-panel.active {
+  display: block;
+  animation: slideIn 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
+}
 
-  /* DECISION BRANCH */
-  .branch-row {
-    display: flex;
-    gap: 16px;
-    width: 100%;
-    padding-bottom: 28px;
-    margin-left: 64px;
-  }
-  .branch-card {
-    flex: 1;
-    border-radius: 12px;
-    padding: 16px 18px;
-    border: 1px solid;
-  }
-  .branch-card.success {
-    background: rgba(22,163,74,0.08);
-    border-color: rgba(22,163,74,0.3);
-  }
-  .branch-card.fail {
-    background: rgba(220,38,38,0.07);
-    border-color: rgba(220,38,38,0.25);
-  }
-  .branch-label {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 13px;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .branch-label .icon { font-size: 16px; }
-  .branch-card.success .branch-label { color: #4ade80; }
-  .branch-card.fail .branch-label { color: #f87171; }
-  .branch-items { list-style: none; }
-  .branch-items li {
-    font-size: 12px;
-    color: rgba(240,246,255,0.6);
-    padding: 3px 0;
-    padding-left: 14px;
-    position: relative;
-    font-weight: 300;
-    line-height: 1.5;
-  }
-  .branch-items li::before {
-    content: '·';
-    position: absolute;
-    left: 4px;
-    color: rgba(240,246,255,0.3);
-  }
+@keyframes slideIn {
+  from { opacity:0; transform: translateX(-20px); }
+  to { opacity:1; transform: translateX(0); }
+}
 
-  /* STATUS PILLS */
-  .pill {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 2px 10px;
-    border-radius: 100px;
-    margin-left: 8px;
-    font-family: 'Syne', sans-serif;
-    vertical-align: middle;
-  }
-  .pill-pending { background: rgba(217,119,6,0.2); color: #fbbf24; border: 1px solid rgba(217,119,6,0.35); }
-  .pill-approved { background: rgba(22,163,74,0.2); color: #4ade80; border: 1px solid rgba(22,163,74,0.35); }
-  .pill-rejected { background: rgba(220,38,38,0.2); color: #f87171; border: 1px solid rgba(220,38,38,0.35); }
-  .pill-system { background: rgba(56,189,248,0.15); color: var(--accent); border: 1px solid rgba(56,189,248,0.25); }
+/* FLOW TITLE */
+.flow-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 40px;
+}
 
-  /* ACTOR TAG */
-  .actor {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 500;
-    padding: 1px 10px;
-    border-radius: 4px;
-    margin-left: 8px;
-    font-family: 'DM Sans', sans-serif;
-    vertical-align: middle;
-  }
-  .actor-admin { background: rgba(37,99,235,0.2); color: var(--accent); }
-  .actor-emp { background: rgba(13,148,136,0.2); color: #2dd4bf; }
-  .actor-sup { background: rgba(168,85,247,0.2); color: #c084fc; }
-  .actor-sys { background: rgba(240,246,255,0.08); color: rgba(240,246,255,0.5); }
+.flow-number {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 80px;
+  line-height: 1;
+  opacity: 0.12;
+  color: var(--ink);
+  letter-spacing: -2px;
+}
 
-  /* ROLE OVERVIEW GRID */
-  .role-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    margin-top: 8px;
-  }
-  .role-card {
-    background: var(--glass);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 24px;
-    transition: transform 0.2s;
-  }
-  .role-card:hover { transform: translateY(-3px); }
-  .role-icon { font-size: 28px; margin-bottom: 12px; }
-  .role-name {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 17px;
-    margin-bottom: 6px;
-  }
-  .role-purpose { font-size: 12px; color: rgba(240,246,255,0.45); margin-bottom: 14px; font-weight: 300; }
-  .role-perms { list-style: none; }
-  .role-perms li {
-    font-size: 12.5px;
-    color: rgba(240,246,255,0.65);
-    padding: 4px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .role-perms li::before { content: '✓'; color: var(--teal); font-size: 11px; flex-shrink: 0; }
+.flow-title-block {}
+.flow-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  letter-spacing: 1px;
+  color: var(--ink);
+  line-height: 1;
+}
+.flow-subtitle {
+  font-size: 13px;
+  color: rgba(26,26,46,0.5);
+  margin-top: 4px;
+  font-weight: 400;
+}
 
-  /* ARCH LAYERS */
-  .arch-layers { display: flex; flex-direction: column; gap: 12px; }
-  .arch-layer {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    background: var(--glass);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 18px 24px;
-    transition: border-color 0.2s;
-  }
-  .arch-layer:hover { border-color: rgba(56,189,248,0.35); }
-  .arch-icon { font-size: 22px; flex-shrink: 0; }
-  .arch-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: #fff; min-width: 140px; }
-  .arch-tech { font-size: 12px; color: var(--accent); font-weight: 500; min-width: 180px; }
-  .arch-desc { font-size: 12px; color: rgba(240,246,255,0.45); font-weight: 300; }
+/* THE DIAGRAM SVG WRAPPER */
+.diagram-svg-wrap {
+  overflow-x: auto;
+  padding-bottom: 16px;
+}
 
-  /* ROADMAP */
-  .roadmap { display: flex; flex-direction: column; gap: 16px; }
-  .roadmap-phase {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid;
-  }
-  .phase1 { background: rgba(220,38,38,0.07); border-color: rgba(220,38,38,0.25); }
-  .phase2 { background: rgba(217,119,6,0.07); border-color: rgba(217,119,6,0.25); }
-  .phase3 { background: rgba(22,163,74,0.07); border-color: rgba(22,163,74,0.25); }
-  .phase4 { background: rgba(37,99,235,0.07); border-color: rgba(37,99,235,0.25); }
-  .phase-num {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 28px;
-    opacity: 0.4;
-    line-height: 1;
-    min-width: 36px;
-  }
-  .phase-content {}
-  .phase-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; margin-bottom: 4px; }
-  .phase-focus { font-size: 12px; opacity: 0.5; margin-bottom: 10px; font-weight: 300; }
-  .phase-items { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
-  .phase-item {
-    font-size: 12px;
-    padding: 3px 12px;
-    border-radius: 100px;
-    background: rgba(255,255,255,0.07);
-    color: rgba(240,246,255,0.75);
-    border: 1px solid rgba(255,255,255,0.1);
-  }
+/* ─── NODE STYLES ─── */
+.node { cursor: default; }
+.node rect, .node ellipse, .node polygon {
+  transition: filter 0.2s;
+}
+.node:hover rect,
+.node:hover ellipse,
+.node:hover polygon {
+  filter: brightness(1.08) drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+}
 
-  /* SECURITY GRID */
-  .sec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
-  .sec-card {
-    background: var(--glass);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 18px;
-    transition: border-color 0.2s;
-  }
-  .sec-card:hover { border-color: rgba(56,189,248,0.4); }
-  .sec-icon { font-size: 20px; margin-bottom: 10px; }
-  .sec-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; color: var(--accent); margin-bottom: 6px; }
-  .sec-impl { font-size: 12px; color: rgba(240,246,255,0.55); line-height: 1.5; font-weight: 300; }
+text {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  fill: #1a1a2e;
+  dominant-baseline: middle;
+  text-anchor: middle;
+  pointer-events: none;
+}
 
-  /* FOOTER */
-  footer {
-    text-align: center;
-    margin-top: 64px;
-    padding-top: 32px;
-    border-top: 1px solid var(--border);
-    font-size: 12px;
-    color: rgba(240,246,255,0.25);
-  }
+text.small { font-size: 11px; font-weight: 500; }
+text.label { fill: white; }
+text.dark { fill: #1a1a2e; }
+
+.arrow { marker-end: url(#arrowhead); }
+.arrow-yes { marker-end: url(#arrowhead-green); }
+.arrow-no { marker-end: url(#arrowhead-red); }
+
+/* LEGEND */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 2px dashed rgba(26,26,46,0.2);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(26,26,46,0.65);
+}
+
+.legend-shape {
+  width: 28px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ROLE BADGES IN DIAGRAM */
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: 2px solid;
+}
 </style>
 </head>
 <body>
-<div class="wrapper">
 
-  <header>
-    <div class="logo-tag">Check Point v1.0</div>
-    <h1>Workflow Diagrams</h1>
-    <p class="subtitle">Employee Management System — Visual process flows for all core operations</p>
-  </header>
-
-  <div class="tabs">
-    <button class="tab active" onclick="show('overview')">System Overview</button>
-    <button class="tab" onclick="show('onboarding')">Onboarding</button>
-    <button class="tab" onclick="show('attendance')">Attendance</button>
-    <button class="tab" onclick="show('leave')">Leave Management</button>
-    <button class="tab" onclick="show('tasks')">Task Management</button>
-    <button class="tab" onclick="show('claims')">Claims & Incidents</button>
-    <button class="tab" onclick="show('security')">Security</button>
-    <button class="tab" onclick="show('roadmap')">Roadmap</button>
+<div class="header">
+  <div class="header-left">
+    <div class="tag">CHECK POINT EMS · v1.0</div>
+    <h1>USER<br><span>FLOW</span><br>DIAGRAMS</h1>
   </div>
+  <p class="header-desc">Interactive flowcharts for all core user journeys — Admin, Supervisor & Employee. Click a flow to explore.</p>
+</div>
 
-  <!-- ═══════════ OVERVIEW ═══════════ -->
-  <div class="panel active" id="panel-overview">
-    <div class="panel-title">System Architecture & Roles</div>
-    <div class="panel-desc">Three-tier architecture connecting Admin, Supervisor, and Employee through a unified mobile platform.</div>
+<div class="selector">
+  <button class="flow-btn active" style="--clr:#ff4d6d" onclick="showFlow('onboarding',this)">
+    <span class="dot"></span><span class="btn-label">01 · Onboarding & Login</span>
+  </button>
+  <button class="flow-btn" style="--clr:#f77f00" onclick="showFlow('attendance',this)">
+    <span class="dot"></span><span class="btn-label">02 · Attendance</span>
+  </button>
+  <button class="flow-btn" style="--clr:#06d6a0" onclick="showFlow('leave',this)">
+    <span class="dot"></span><span class="btn-label">03 · Leave Management</span>
+  </button>
+  <button class="flow-btn" style="--clr:#4361ee" onclick="showFlow('tasks',this)">
+    <span class="dot"></span><span class="btn-label">04 · Task Management</span>
+  </button>
+  <button class="flow-btn" style="--clr:#7b2d8b" onclick="showFlow('claims',this)">
+    <span class="dot"></span><span class="btn-label">05 · Claims & Incidents</span>
+  </button>
+  <button class="flow-btn" style="--clr:#118ab2" onclick="showFlow('admin',this)">
+    <span class="dot"></span><span class="btn-label">06 · Admin Management</span>
+  </button>
+</div>
 
-    <div style="margin-bottom:36px;">
-      <div style="font-family:'Syne',sans-serif; font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:rgba(240,246,255,0.35); margin-bottom:16px;">Architecture Layers</div>
-      <div class="arch-layers">
-        <div class="arch-layer" style="border-color:rgba(56,189,248,0.35);">
-          <div class="arch-icon">📱</div>
-          <div class="arch-name">Presentation Layer</div>
-          <div class="arch-tech">Flutter (Dart) — iOS & Android</div>
-          <div class="arch-desc">Mobile apps for Admin, Employee & Supervisor roles</div>
-        </div>
-        <div class="arch-layer">
-          <div class="arch-icon">⚙️</div>
-          <div class="arch-name">Business Logic Layer</div>
-          <div class="arch-tech">ASP.NET REST API</div>
-          <div class="arch-desc">Authentication, business rules, validation, JWT tokens</div>
-        </div>
-        <div class="arch-layer">
-          <div class="arch-icon">🗄️</div>
-          <div class="arch-name">Data Layer</div>
-          <div class="arch-tech">SQL Server · Google Maps · Firebase</div>
-          <div class="arch-desc">Persistent storage, geolocation, push notifications</div>
-        </div>
+<div class="diagram-area">
+
+  <!-- ════════════════════════════════════════
+       FLOW 1: ONBOARDING & LOGIN
+  ════════════════════════════════════════ -->
+  <div class="flow-panel active" id="flow-onboarding">
+    <div class="flow-header">
+      <div class="flow-number">01</div>
+      <div class="flow-title-block">
+        <div class="flow-title">Onboarding & Login Flow</div>
+        <div class="flow-subtitle">First-time device registration → Admin approval → Active session</div>
       </div>
     </div>
+    <div class="diagram-svg-wrap">
+      <svg width="960" height="720" viewBox="0 0 960 720" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#1a1a2e"/>
+          </marker>
+          <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#06d6a0"/>
+          </marker>
+          <marker id="arrowhead-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#ff4d6d"/>
+          </marker>
+        </defs>
 
-    <div style="font-family:'Syne',sans-serif; font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:rgba(240,246,255,0.35); margin-bottom:16px;">User Roles</div>
-    <div class="role-grid">
-      <div class="role-card" style="border-color:rgba(37,99,235,0.35);">
-        <div class="role-icon">🛡️</div>
-        <div class="role-name" style="color:#93c5fd;">Administrator</div>
-        <div class="role-purpose">Full system control & employee lifecycle</div>
-        <ul class="role-perms">
-          <li>Manage employees, departments, shifts</li>
-          <li>Configure branches with geofences</li>
-          <li>Approve new device registrations</li>
-          <li>Broadcast push notifications</li>
-          <li>Manage clients, sites & holidays</li>
-        </ul>
-      </div>
-      <div class="role-card" style="border-color:rgba(168,85,247,0.35);">
-        <div class="role-icon">👔</div>
-        <div class="role-name" style="color:#c084fc;">Supervisor</div>
-        <div class="role-purpose">Team oversight & task coordination</div>
-        <ul class="role-perms">
-          <li>View & export team attendance</li>
-          <li>Approve / reject leaves & claims</li>
-          <li>Create and assign tasks</li>
-          <li>Attend on behalf of employees</li>
-          <li>Manage customer visit plans</li>
-        </ul>
-      </div>
-      <div class="role-card" style="border-color:rgba(13,148,136,0.35);">
-        <div class="role-icon">👤</div>
-        <div class="role-name" style="color:#2dd4bf;">Employee</div>
-        <div class="role-purpose">Daily operations & self-service</div>
-        <ul class="role-perms">
-          <li>GPS-verified check-in / check-out</li>
-          <li>Submit leave & expense claims</li>
-          <li>View & update assigned tasks</li>
-          <li>Report incidents</li>
-          <li>Submit workflow documents</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+        <!-- START -->
+        <g class="node">
+          <ellipse cx="480" cy="40" rx="80" ry="28" fill="#1a1a2e"/>
+          <text y="40" fill="white" x="480">App Launch</text>
+        </g>
+        <line x1="480" y1="68" x2="480" y2="100" stroke="#1a1a2e" stroke-width="2.5" class="arrow"/>
 
-  <!-- ═══════════ ONBOARDING ═══════════ -->
-  <div class="panel" id="panel-onboarding">
-    <div class="panel-title">User Onboarding Flow</div>
-    <div class="panel-desc">First-time device registration through admin approval to active session.</div>
-    <div class="flow">
+        <!-- Splash Screen -->
+        <g class="node">
+          <rect x="350" y="100" width="260" height="52" rx="8" fill="#fcbf49" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="480" y="126">🎬  Splash Screen (3s)</text>
+        </g>
+        <line x1="480" y1="152" x2="480" y2="185" stroke="#1a1a2e" stroke-width="2.5" class="arrow"/>
 
-      <div class="step">
-        <div class="step-line">
-          <div class="step-num" style="background:rgba(37,99,235,0.25);border:2px solid #2563eb;color:#93c5fd;">1</div>
-          <div class="connector"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-card">
-            <div class="step-label">App Launch <span class="actor actor-sys">System</span></div>
-            <ul class="step-items">
-              <li>Animated splash screen plays for 3 seconds</li>
-              <li>First-time users see a 3-page animated walkthrough (skippable)</li>
-              <li>User selects their role: Admin, Employee, or Supervisor</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+        <!-- First time? -->
+        <g class="node">
+          <polygon points="480,185 570,220 480,255 390,220" fill="#ff4d6d" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="480" y="220" fill="white">First Time?</text>
+        </g>
+        <!-- YES → Onboarding -->
+        <line x1="570" y1="220" x2="680" y2="220" stroke="#1a1a2e" stroke-width="2.5" class="arrow"/>
+        <text x="618" y="212" class="small">YES</text>
+        <g class="node">
+          <rect x="680" y="196" width="190" height="52" rx="8" fill="#f77f00" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="775" y="222" fill="white">3-Page Walkthrough</text>
+        </g>
+        <line x1="775" y1="248" x2="775" y2="275" stroke="#1a1a2e" stroke-width="2.5" class="arrow"/>
+        <g class="node">
+          <rect x="680" y="275" width="190" height="44" rx="8" fill="#ffecd1" stroke="#1a1a2e" stroke-width="2"/>
+          <text x="775" y="297">(Skippable)</text>
+        </g>
+        <!-- Connect back down -->
+        <line x1="775" y1="319" x2="775" y2="360" stroke="#1a1a2e" stroke-width="2" stroke-dasharray="5,4"/>
+        <line x1="775" y1="360" x2="600" y2="360" stroke="#1a1a2e" stroke-width="2" stroke-dasharray="5,4"/>
+        <line x1="600" y1="360" x2="600" y2="316" stroke="#1a1a2e" stroke-width="2" stroke-dasharray="5,4" class="arrow"/>
 
-      <div class="step">
-        <div class="step-line">
-          <div class="step-num" style="background:rgba(13,148,136,0.25);border:2px solid #0d9488;color:#2dd4bf;">2</div>
-          <div class="connector"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-card">
-            <div class="step-label">Device Registration <span class="actor actor-emp">Employee / Supervisor</span></div>
-            <ul class="step-items">
-              <li>User enters their device name on the registration screen</li>
-              <li>System generates an Account Request with device ID and details</li>
-              <li>Request is queued for Administrator review</li>
-              <li>User awaits admin approval before proceeding to login</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+        <!-- NO → Role Select -->
+        <line x1="480" y1="255" x2="480" y2="295" stroke="#1a1a2e" stroke-width="2.5" class="arrow"/>
+        <text x="490" y="278" class="small">NO</text>
 
-      <div class="step">
-        <div class="step-line">
-          <div class="step-num" style="background:rgba(168,85,247,0.25);border:2px solid #a855f7;color:#c084fc;">3</div>
-          <div class="connector"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-card">
-            <div class="step-label">Admin Review <span class="actor actor-admin">Admin</span></div>
-            <ul class="step-items">
-              <li>Administrator sees a notification badge on dashboard for pending requests</li>
-              <li>Reviews device name, registration details, and user information</li>
-              <li>Approves or rejects the device registration</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+        <!-- Role Selection -->
+        <g class="node">
+          <rect x="340" y="295" width="280" height="52" rx="8" fill="#4361ee" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="480" y="321" fill="white">Select Role</text>
+        </g>
 
-      <div class="branch-row" style="margin-left:0;">
-        <div style="width:64px; flex-shrink:0;"></div>
-        <div class="branch-card success">
-          <div class="branch-label"><span class="icon">✅</span> Approved</div>
-          <ul class="branch-items">
-            <li>User proceeds to role-specific login screen</li>
-            <li>Enters Username + Password</li>
-            <li>JWT token returned and stored securely</li>
-            <li>Auto-login active until logout or expiry</li>
-          </ul>
-        </div>
-        <div class="branch-card fail">
-          <div class="branch-label"><span class="icon">❌</span> Rejected</div>
-          <ul class="branch-items">
-            <li>User is notified of rejection</li>
-            <li>Registration attempt blocked</li>
-            <li>User must contact administrator</li>
-          </ul>
-        </div>
-      </div>
+        <!-- Three role branches -->
+        <line x1="390" y1="347" x2="280" y2="395" stroke="#1a1a2e" stroke-width="2" class="arrow"/>
+        <line x1="480" y1="347" x2="480" y2="395" stroke="#1a1a2e" stroke-width="2" class="arrow"/>
+        <line x1="570" y1="347" x2="680" y2="395" stroke="#1a1a2e" stroke-width="2" class="arrow"/>
 
-      <div class="step">
-        <div class="step-line">
-          <div class="step-num" style="background:rgba(56,189,248,0.2);border:2px solid #38bdf8;color:#38bdf8;">4</div>
-        </div>
-        <div class="step-body">
-          <div class="step-card">
-            <div class="step-label">Active Session <span class="actor actor-sys">System</span></div>
-            <ul class="step-items">
-              <li>JWT Bearer token attached to every API request</li>
-              <li>Session persists until user logs out or token expires</li>
-              <li>On logout: secure storage cleared, returns to role selection</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+        <!-- Admin box -->
+        <g class="node">
+          <rect x="180" y="395" width="200" height="50" rx="8" fill="#ff4d6d" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="280" y="420" fill="white">🛡️  Admin Login</text>
+        </g>
+        <!-- Employee box -->
+        <g class="node">
+          <rect x="370" y="395" width="220" height="50" rx="8" fill="#06d6a0" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="480" y="420">👤  Employee Path</text>
+        </g>
+        <!-- Supervisor box -->
+        <g class="node">
+          <rect x="610" y="395" width="220" height="50" rx="8" fill="#7b2d8b" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="720" y="420" fill="white">👔  Supervisor Path</text>
+        </g>
 
-    </div>
-  </div>
+        <!-- Admin goes direct to login -->
+        <line x1="280" y1="445" x2="280" y2="510" stroke="#1a1a2e" stroke-width="2" class="arrow"/>
 
-  <!-- ═══════════ ATTENDANCE ═══════════ -->
-  <div class="panel" id="panel-attendance">
-    <div class="panel-title">Attendance Check-In / Check-Out Flow</div>
-    <div class="panel-desc">GPS geofencing + mandatory photo verification for tamper-resistant attendance records.</div>
-    <div class="flow">
+        <!-- Employee & Supervisor → Device Registration -->
+        <line x1="480" y1="445" x2="480" y2="480" stroke="#1a1a2e" stroke-width="2"/>
+        <line x1="720" y1="445" x2="720" y2="480" stroke="#1a1a2e" stroke-width="2"/>
+        <line x1="480" y1="480" x2="720" y2="480" stroke="#1a1a2e" stroke-width="2"/>
+        <line x1="600" y1="480" x2="600" y2="510" stroke="#1a1a2e" stroke-width="2" class="arrow"/>
 
-      <div class="step">
-        <div class="step-line">
-          <div class="step-num" style="background:rgba(13,148,136,0.25);border:2px solid #0d9488;color:#2dd4bf;">1</div>
-          <div class="connector"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-card">
-            <div class="step-label">Initiate Check-In <span class="actor actor-emp">Employee</span></div>
-            <ul class="step-items">
-              <li>Employee opens the Check-In screen</li>
-              <li>Selects location type: <strong style="color:#fff;">Office</strong> (branch), <strong style="color:#fff;">Customer</strong> location, or <strong style="color:#fff;">Site</strong></li>
-              <li>App fetches coordinates for the selected location from server</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+        <!-- Device Registration -->
+        <g class="node">
+          <rect x="470" y="510" width="260" height="52" rx="8" fill="#fcbf49" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="600" y="536">📱  Device Registration</text>
+        </g>
+        <line x1="600" y1="562" x2="600" y2="595" stroke="#1a1a2e" stroke-width="2.5" class="arrow"/>
 
-      <div class="step">
-        <div class="step-line">
-          <div class="step-num" style="background:rgba(37,99,235,0.25);border:2px solid #2563eb;color:#93c5fd;">2</div>
-          <div class="connector"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-card">
-            <div class="step-label">GPS Location Validation <span class="actor actor-sys">System</span></div>
-            <ul class="step-items">
-              <li>Map displays with geofence polygon boundary highlighted</li>
-              <li>App acquires employee's current GPS coordinates</li>
-              <li>System compares employee location against the polygon boundary</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+        <!-- Admin Approval Decision -->
+        <g class="node">
+          <polygon points="600,595 700,630 600,665 500,630" fill="#f77f00" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="600" y="630" fill="white">Admin Approves?</text>
+        </g>
 
-      <div class="branch-row" style="margin-left:0;">
-        <div style="width:64px; flex-shrink:0;"></div>
-        <div class="branch-card success">
-          <div class="branch-label"><span class="icon">📍</span> Inside Geofence</div>
-          <ul class="branch-items">
-            <li>Camera opens automatically</li>
-            <li>Employee captures mandatory photo</li>
-            <li>Check-in submitted: employee ID, photo (base64), GPS, timestamp</li>
-            <li>Background location tracking starts</li>
-          </ul>
-        </div>
-        <div class="branch-card fail">
-          <div class="branch-label"><span class="icon">🚫</span> Outside Geofence</div>
-          <ul class="branch-items">
-            <li>Error message displayed</li>
-            <li>Check-in blocked — no record created</li>
-            <li>Employee must move to valid location and retry</li>
-          </ul>
-        </div>
-      </div>
+        <!-- Rejected -->
+        <line x1="700" y1="630" x2="800" y2="630" stroke="#ff4d6d" stroke-width="2.5" class="arrow-no"/>
+        <text x="745" y="622" class="small" fill="#ff4d6d">NO</text>
+        <g class="node">
+          <rect x="800" y="606" width="130" height="48" rx="8" fill="#ffe0e6" stroke="#ff4d6d" stroke-width="2"/>
+          <text x="865" y="630" fill="#c0002a">❌  Rejected</text>
+        </g>
 
-      <div class="step">
-        <div class="step-line">
-          <div class="step-num" style="background:rgba(13,148,136,0.25);border:2px solid #0d9488;color:#2dd4bf;">3</div>
-          <div class="connector"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-card">
-            <div class="step-label">During Work — Background Tracking <span class="actor actor-sys">System</span></div>
-            <ul class="step-items">
-              <li>Background location service periodically records employee GPS coordinates</li>
-              <li>Supervisor can view team location and attendance status in real time</li>
-              <li>Late comers and early leavers are automatically flagged</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+        <!-- Approved -->
+        <line x1="600" y1="665" x2="600" y2="695" stroke="#06d6a0" stroke-width="2.5" class="arrow-yes"/>
+        <text x="612" y="683" class="small" fill="#06d6a0">YES</text>
 
-      <div class="step">
-        <div class="step-line">
-          <div class="step-num" style="background:rgba(37,99,235,0.25);border:2px solid #2563eb;color:#93c5fd;">4</div>
-          <div class="connector"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-card">
-            <div class="step-label">Check-Out <span class="actor actor-emp">Employee</span></div>
-            <ul class="step-items">
-              <li>Employee navigates to Check-Out screen at end of shift</li>
-              <li>GPS location re-validated against geofence</li>
-              <li>Second mandatory photo captured for exit verification</li>
-              <li>Check-out submitted; background tracking stops</li>
-              <li>Total work duration calculated and attendance record finalized</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+        <!-- Direct Admin login lands here too -->
+        <g class="node">
+          <rect x="150" y="510" width="260" height="52" rx="8" fill="#ffecd1" stroke="#1a1a2e" stroke-width="2"/>
+          <text x="280" y="536">Enter Username + Password</text>
+        </g>
+        <line x1="280" y1="562" x2="280" y2="695" stroke="#1a1a2e" stroke-width="2" stroke-dasharray="5,4"/>
+        <line x1="280" y1="695" x2="440" y2="695" stroke="#1a1a2e" stroke-width="2" stroke-dasharray="5,4"/>
 
-      <div class="step">
-        <div class="step-line">
-          <div class="step-num" style="background:rgba(168,85,247,0.25);border:2px solid #a855f7;color:#c084fc;">5</div>
-        </div>
-        <div class="step-body">
-          <div class="step-card">
-            <div class="step-label">Supervisor Review & Export <span class="actor actor-sup">Supervisor</span></div>
-            <ul class="step-items">
-              <li>Reviews team attendance dashboard with check-in times and durations</li>
-              <li>Views late comers list (arrived after shift start)</li>
-              <li>Views early leavers list (left before shift end)</li>
-              <li>Can attend on behalf of employees (if admin-authorized)</li>
-              <li>Exports attendance data to Excel for HR processing</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+        <!-- JWT Token / Session -->
+        <g class="node">
+          <rect x="440" y="695" width="320" height="52" rx="8" fill="#4361ee" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="600" y="721" fill="white">🔐  JWT Token Stored · Session Active</text>
+        </g>
 
-    </div>
-  </div>
-
-  <!-- ═══════════ LEAVE ═══════════ -->
-  <div class="panel" id="panel-leave">
-    <div class="panel-title">Leave Management Workflow</div>
-    <div class="panel-desc">Complete lifecycle from employee submission through supervisor decision.</div>
-    <div class="flow">
-
-      <div class="step">
-        <div class="step-line">
-          <div class="step-num" style="background:rgba(13,148,136,0.25);border:2px solid #0d9488;color:#2dd4bf;">1</div>
-          <div class="connector"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-card">
-            <div class="step-label">Submit Leave Request <span class="actor actor-emp">Employee</span> <span class="pill pill-pending">Pending</span></div>
-            <ul class="step-items">
-              <li>Fills in: Start Date, End Date, Reason (max 200 chars), optional Remark</li>
-              <li>Request created with Pending status</li>
-              <li>Visible in My Leave Requests under the Leave tab</li>
-              <li>Employee can delete the request while it remains Pending</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-line">
-          <div class="step-num" style="background:rgba(56,189,248,0.15);border:2px solid #38bdf8;color:#38bdf8;">2</div>
-          <div class="connector"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-card">
-            <div class="step-label">Supervisor Notified <span class="actor actor-sys">System</span></div>
-            <ul class="step-items">
-              <li>Push notification sent to supervisor (when Firebase enabled)</li>
-              <li>Request appears in Supervisor leave approval queue</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-line">
-          <div class="step-num" style="background:rgba(168,85,247,0.25);border:2px solid #a855f7;color:#c084fc;">3</div>
-          <div class="connector"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-card">
-            <div class="step-label">Supervisor Reviews Request <span class="actor actor-sup">Supervisor</span></div>
-            <ul class="step-items">
-              <li>Reviews leave dates, reason, and employee history</li>
-              <li>Checks team schedule and availability</li>
-              <li>Makes approval decision within target of &lt; 24 hours</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="branch-row" style="margin-left:0;">
-        <div style="width:64px; flex-shrink:0;"></div>
-        <div class="branch-card success">
-          <div class="branch-label"><span class="icon">✅</span> Approved <span class="pill pill-approved" style="margin-left:4px;">Approved</span></div>
-          <ul class="branch-items">
-            <li>Status updated to Approved (green)</li>
-            <li>Employee notified via push notification</li>
-            <li>Leave appears in Leave Planner calendar</li>
-            <li>Added to Leave Schedule timeline</li>
-          </ul>
-        </div>
-        <div class="branch-card fail">
-          <div class="branch-label"><span class="icon">❌</span> Rejected <span class="pill pill-rejected" style="margin-left:4px;">Rejected</span></div>
-          <ul class="branch-items">
-            <li>Status updated to Rejected (red)</li>
-            <li>Employee notified of rejection</li>
-            <li>Employee can submit a new request if needed</li>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ═══════════ TASKS ═══════════ -->
-  <div class="panel" id="panel-tasks">
-    <div class="panel-title">Task Management Workflow</div>
-    <div class="panel-desc">Supervisors create and assign tasks; employees execute and update status through to completion.</div>
-    <div class="flow">
-
-      <div class="step">
-        <div class="step-line">
-          <div class="step-num" style="background:rgba(168,85,247,0.25);border:2px solid #a855f7;color:#c084fc;">1</div>
-          <div class="connector"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-card">
-            <div class="step-label">Create Task <span class="actor actor-sup">Supervisor</span></div>
-            <ul class="step-items">
-              <li>Enters: Title, Description, Due Date (date picker), Priority (High / Medium / Low)</li>
-              <li>Selects one or multiple employees to assign the task</li>
-              <li>Task created with initial status: <strong style="color:#fbbf24;">Pending</strong></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-line">
-          <div class="step-num" style="background:rgba(13,148,136,0.25);border:2px solid #0d9488;color:#2dd4bf;">2</div>
-          <div class="connector"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-card">
-            <div class="step-label">Employee Receives Task <span class="actor actor-emp">Employee</span></div>
-            <ul class="step-items">
-              <li>Task visible in employee's task list with title, description, due date, priority</li>
-              <li>Employee reviews requirements and begins work</li>
-              <li>Updates status to <strong style="color:#60a5fa;">In Progress</strong></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-line">
-          <div class="step-num" style="background:rgba(13,148,136,0.25);border:2px solid #0d9488;color:#2dd4bf;">3</div>
-          <div class="connector"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-card">
-            <div class="step-label">Task Completion <span class="actor actor-emp">Employee</span></div>
-            <ul class="step-items">
-              <li>Work completed; employee updates status to <strong style="color:#4ade80;">Completed</strong></li>
-              <li>Completion recorded with timestamp</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-line">
-          <div class="step-num" style="background:rgba(168,85,247,0.25);border:2px solid #a855f7;color:#c084fc;">4</div>
-        </div>
-        <div class="step-body">
-          <div class="step-card">
-            <div class="step-label">Supervisor Oversight <span class="actor actor-sup">Supervisor</span></div>
-            <ul class="step-items">
-              <li>Monitors task status across the entire team</li>
-              <li>Can edit any task field (title, description, due date, priority)</li>
-              <li>Can delete a task with confirmation</li>
-              <li>Views team productivity rankings on the Leaderboard</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
+        <!-- Role labels -->
+        <rect x="165" y="388" width="60" height="20" rx="4" fill="#ff4d6d"/>
+        <text x="195" y="398" class="small" fill="white">ADMIN</text>
+        <rect x="465" y="388" width="72" height="20" rx="4" fill="#06d6a0"/>
+        <text x="501" y="398" class="small">EMPLOYEE</text>
+        <rect x="705" y="388" width="84" height="20" rx="4" fill="#7b2d8b"/>
+        <text x="747" y="398" class="small" fill="white">SUPERVISOR</text>
+      </svg>
     </div>
 
-    <!-- Status Flow Visual -->
-    <div style="margin-top:32px; padding:20px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px;">
-      <div style="font-family:'Syne',sans-serif; font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:rgba(240,246,255,0.3); margin-bottom:16px;">Task Status Flow</div>
-      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-        <div style="background:rgba(217,119,6,0.2); border:1px solid rgba(217,119,6,0.4); color:#fbbf24; padding:8px 20px; border-radius:8px; font-family:'Syne',sans-serif; font-weight:700; font-size:13px;">PENDING</div>
-        <div style="color:rgba(240,246,255,0.3); font-size:20px;">→</div>
-        <div style="background:rgba(37,99,235,0.2); border:1px solid rgba(37,99,235,0.4); color:#60a5fa; padding:8px 20px; border-radius:8px; font-family:'Syne',sans-serif; font-weight:700; font-size:13px;">IN PROGRESS</div>
-        <div style="color:rgba(240,246,255,0.3); font-size:20px;">→</div>
-        <div style="background:rgba(22,163,74,0.2); border:1px solid rgba(22,163,74,0.4); color:#4ade80; padding:8px 20px; border-radius:8px; font-family:'Syne',sans-serif; font-weight:700; font-size:13px;">COMPLETED</div>
+    <div class="legend">
+      <div class="legend-item">
+        <svg width="28" height="18"><ellipse cx="14" cy="9" rx="13" ry="8" fill="#1a1a2e"/></svg>
+        Start / End
+      </div>
+      <div class="legend-item">
+        <svg width="28" height="18"><rect x="2" y="3" width="24" height="12" rx="3" fill="#4361ee"/></svg>
+        Process / Action
+      </div>
+      <div class="legend-item">
+        <svg width="28" height="18"><polygon points="14,2 26,9 14,16 2,9" fill="#f77f00"/></svg>
+        Decision
+      </div>
+      <div class="legend-item">
+        <svg width="28" height="18"><line x1="2" y1="9" x2="22" y2="9" stroke="#1a1a2e" stroke-width="2" stroke-dasharray="4,3"/><polygon points="18,6 26,9 18,12" fill="#1a1a2e"/></svg>
+        Optional Path
       </div>
     </div>
   </div>
 
-  <!-- ═══════════ CLAIMS ═══════════ -->
-  <div class="panel" id="panel-claims">
-    <div class="panel-title">Claims & Incident Reporting</div>
-    <div class="panel-desc">Expense claims and workplace incident reports — both routed through supervisor review.</div>
-
-    <div style="margin-bottom:32px;">
-      <div style="font-family:'Syne',sans-serif; font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:rgba(240,246,255,0.35); margin-bottom:16px;">💰 Expense Claims</div>
-      <div class="flow">
-        <div class="step">
-          <div class="step-line">
-            <div class="step-num" style="background:rgba(13,148,136,0.25);border:2px solid #0d9488;color:#2dd4bf; font-size:13px;">1</div>
-            <div class="connector"></div>
-          </div>
-          <div class="step-body">
-            <div class="step-card">
-              <div class="step-label">Submit Claim <span class="actor actor-emp">Employee</span> <span class="pill pill-pending">Pending</span></div>
-              <ul class="step-items"><li>Employee submits expense claim with amount, description, and supporting details</li></ul>
-            </div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-line">
-            <div class="step-num" style="background:rgba(168,85,247,0.25);border:2px solid #a855f7;color:#c084fc; font-size:13px;">2</div>
-            <div class="connector"></div>
-          </div>
-          <div class="step-body">
-            <div class="step-card">
-              <div class="step-label">Supervisor Review <span class="actor actor-sup">Supervisor</span></div>
-              <ul class="step-items"><li>Reviews claim details, amount, and justification</li></ul>
-            </div>
-          </div>
-        </div>
-        <div class="branch-row" style="margin-left:0;">
-          <div style="width:64px; flex-shrink:0;"></div>
-          <div class="branch-card success">
-            <div class="branch-label"><span class="icon">✅</span> Approved <span class="pill pill-approved" style="margin-left:4px;">Approved</span></div>
-            <ul class="branch-items"><li>Claim approved; employee notified</li><li>Expense recorded for HR processing</li></ul>
-          </div>
-          <div class="branch-card fail">
-            <div class="branch-label"><span class="icon">❌</span> Rejected <span class="pill pill-rejected" style="margin-left:4px;">Rejected</span></div>
-            <ul class="branch-items"><li>Claim rejected; employee notified</li><li>Employee may resubmit with corrections</li></ul>
-          </div>
-        </div>
+  <!-- ════════════════════════════════════════
+       FLOW 2: ATTENDANCE
+  ════════════════════════════════════════ -->
+  <div class="flow-panel" id="flow-attendance">
+    <div class="flow-header">
+      <div class="flow-number">02</div>
+      <div class="flow-title-block">
+        <div class="flow-title">Attendance Check-In / Out Flow</div>
+        <div class="flow-subtitle">GPS geofencing + photo verification for tamper-resistant records</div>
       </div>
     </div>
+    <div class="diagram-svg-wrap">
+      <svg width="960" height="780" viewBox="0 0 960 780" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#1a1a2e"/>
+          </marker>
+          <marker id="arr2g" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#06d6a0"/>
+          </marker>
+          <marker id="arr2r" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#ff4d6d"/>
+          </marker>
+        </defs>
 
-    <div style="font-family:'Syne',sans-serif; font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:rgba(240,246,255,0.35); margin-bottom:16px;">🚨 Incident Reporting</div>
-    <div class="flow">
-      <div class="step">
-        <div class="step-line">
-          <div class="step-num" style="background:rgba(220,38,38,0.2);border:2px solid #dc2626;color:#f87171; font-size:13px;">1</div>
-          <div class="connector"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-card">
-            <div class="step-label">Report Incident <span class="actor actor-emp">Employee</span></div>
-            <ul class="step-items"><li>Employee reports a personal or team incident via the Incidents tab</li><li>Details recorded: description, date/time, people involved</li></ul>
-          </div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-line">
-          <div class="step-num" style="background:rgba(56,189,248,0.15);border:2px solid #38bdf8;color:#38bdf8; font-size:13px;">2</div>
-          <div class="connector"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-card">
-            <div class="step-label">Record Created <span class="actor actor-sys">System</span></div>
-            <ul class="step-items"><li>Incident logged with timestamp and employee ID</li></ul>
-          </div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-line">
-          <div class="step-num" style="background:rgba(168,85,247,0.25);border:2px solid #a855f7;color:#c084fc; font-size:13px;">3</div>
-        </div>
-        <div class="step-body">
-          <div class="step-card">
-            <div class="step-label">Supervisor Action <span class="actor actor-sup">Supervisor</span></div>
-            <ul class="step-items"><li>Supervisor reviews incident report in their Incidents screen</li><li>Takes appropriate action, documents response</li></ul>
-          </div>
-        </div>
-      </div>
+        <!-- START: Employee opens app -->
+        <g class="node">
+          <ellipse cx="480" cy="40" rx="110" ry="28" fill="#1a1a2e"/>
+          <text x="480" y="40" fill="white">Employee Opens App</text>
+        </g>
+        <line x1="480" y1="68" x2="480" y2="100" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr2)"/>
+
+        <!-- Select Location Type -->
+        <g class="node">
+          <rect x="320" y="100" width="320" height="52" rx="8" fill="#f77f00" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="480" y="126" fill="white">Select Check-In Type</text>
+        </g>
+
+        <!-- 3 branches -->
+        <line x1="390" y1="152" x2="200" y2="202" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arr2)"/>
+        <line x1="480" y1="152" x2="480" y2="202" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arr2)"/>
+        <line x1="570" y1="152" x2="760" y2="202" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arr2)"/>
+
+        <text x="270" y="180" class="small">Office</text>
+        <text x="490" y="180" class="small">Customer</text>
+        <text x="680" y="180" class="small">Site</text>
+
+        <!-- Three boxes -->
+        <g class="node">
+          <rect x="100" y="202" width="200" height="48" rx="8" fill="#fcbf49" stroke="#1a1a2e" stroke-width="2"/>
+          <text x="200" y="226">🏢  Branch Location</text>
+        </g>
+        <g class="node">
+          <rect x="370" y="202" width="220" height="48" rx="8" fill="#fcbf49" stroke="#1a1a2e" stroke-width="2"/>
+          <text x="480" y="226">🏪  Customer Location</text>
+        </g>
+        <g class="node">
+          <rect x="660" y="202" width="200" height="48" rx="8" fill="#fcbf49" stroke="#1a1a2e" stroke-width="2"/>
+          <text x="760" y="226">🏗️  Site Location</text>
+        </g>
+
+        <!-- All converge to fetch coords -->
+        <line x1="200" y1="250" x2="200" y2="280" stroke="#1a1a2e" stroke-width="2"/>
+        <line x1="480" y1="250" x2="480" y2="280" stroke="#1a1a2e" stroke-width="2"/>
+        <line x1="760" y1="250" x2="760" y2="280" stroke="#1a1a2e" stroke-width="2"/>
+        <line x1="200" y1="280" x2="760" y2="280" stroke="#1a1a2e" stroke-width="2"/>
+        <line x1="480" y1="280" x2="480" y2="310" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arr2)"/>
+
+        <!-- Fetch Coordinates -->
+        <g class="node">
+          <rect x="320" y="310" width="320" height="52" rx="8" fill="#4361ee" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="480" y="336" fill="white">📡  Fetch Location Coordinates</text>
+        </g>
+        <line x1="480" y1="362" x2="480" y2="395" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr2)"/>
+
+        <!-- Map Display -->
+        <g class="node">
+          <rect x="330" y="395" width="300" height="52" rx="8" fill="#118ab2" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="480" y="421" fill="white">🗺️  Display Map + Geofence</text>
+        </g>
+        <line x1="480" y1="447" x2="480" y2="480" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr2)"/>
+
+        <!-- GPS Check Decision -->
+        <g class="node">
+          <polygon points="480,480 610,522 480,564 350,522" fill="#ff4d6d" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="480" y="515" fill="white">Inside</text>
+          <text x="480" y="530" fill="white">Geofence?</text>
+        </g>
+
+        <!-- NO → Error -->
+        <line x1="350" y1="522" x2="160" y2="522" stroke="#ff4d6d" stroke-width="2.5" marker-end="url(#arr2r)"/>
+        <text x="248" y="514" class="small" fill="#ff4d6d">NO</text>
+        <g class="node">
+          <rect x="40" y="498" width="120" height="48" rx="8" fill="#ffe0e6" stroke="#ff4d6d" stroke-width="2"/>
+          <text x="100" y="518" fill="#c0002a">❌ Error</text>
+          <text x="100" y="534" class="small" fill="#c0002a">Show message</text>
+        </g>
+        <!-- Retry arrow -->
+        <line x1="40" y1="522" x2="20" y2="522" stroke="#ff4d6d" stroke-width="1.5"/>
+        <line x1="20" y1="522" x2="20" y2="126" stroke="#ff4d6d" stroke-width="1.5" stroke-dasharray="5,4"/>
+        <line x1="20" y1="126" x2="320" y2="126" stroke="#ff4d6d" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#arr2r)"/>
+        <text x="28" y="350" class="small" fill="#ff4d6d">Retry</text>
+
+        <!-- YES → Camera -->
+        <line x1="480" y1="564" x2="480" y2="597" stroke="#06d6a0" stroke-width="2.5" marker-end="url(#arr2g)"/>
+        <text x="492" y="583" class="small" fill="#06d6a0">YES</text>
+
+        <!-- Camera Opens -->
+        <g class="node">
+          <rect x="330" y="597" width="300" height="52" rx="8" fill="#06d6a0" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="480" y="623">📸  Camera Opens → Capture Photo</text>
+        </g>
+        <line x1="480" y1="649" x2="480" y2="682" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr2)"/>
+
+        <!-- Submit Check-In -->
+        <g class="node">
+          <rect x="290" y="682" width="380" height="52" rx="8" fill="#1a1a2e" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="480" y="708" fill="#fcbf49">✅  Check-In Submitted to Server</text>
+        </g>
+
+        <!-- Background tracking -->
+        <line x1="670" y1="708" x2="820" y2="708" stroke="#1a1a2e" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arr2)"/>
+        <g class="node">
+          <rect x="820" y="684" width="120" height="48" rx="8" fill="#e8f4fd" stroke="#118ab2" stroke-width="2"/>
+          <text x="880" y="703" class="small" fill="#118ab2">📍 Background</text>
+          <text x="880" y="718" class="small" fill="#118ab2">Tracking On</text>
+        </g>
+
+        <!-- EMPLOYEE badge -->
+        <rect x="318" y="93" width="80" height="20" rx="4" fill="#06d6a0"/>
+        <text x="358" y="103" class="small">EMPLOYEE</text>
+      </svg>
     </div>
-  </div>
-
-  <!-- ═══════════ SECURITY ═══════════ -->
-  <div class="panel" id="panel-security">
-    <div class="panel-title">Security & Authentication Layers</div>
-    <div class="panel-desc">Multi-layered security covering token management, biometric controls, and location fraud prevention.</div>
-    <div class="sec-grid">
-      <div class="sec-card">
-        <div class="sec-icon">🔐</div>
-        <div class="sec-name">Token Storage</div>
-        <div class="sec-impl">FlutterSecureStorage with hardware-level encryption protects JWT from unauthorized access</div>
-      </div>
-      <div class="sec-card">
-        <div class="sec-icon">🎫</div>
-        <div class="sec-name">API Authentication</div>
-        <div class="sec-impl">JWT Bearer token attached to every single API request — no unauthenticated calls permitted</div>
-      </div>
-      <div class="sec-card">
-        <div class="sec-icon">📱</div>
-        <div class="sec-name">Device Binding</div>
-        <div class="sec-impl">Mobile device ID stored with user account — prevents account sharing across devices</div>
-      </div>
-      <div class="sec-card">
-        <div class="sec-icon">📸</div>
-        <div class="sec-name">Photo Verification</div>
-        <div class="sec-impl">Mandatory camera capture on every check-in AND check-out creates a visual identity record</div>
-      </div>
-      <div class="sec-card">
-        <div class="sec-icon">📍</div>
-        <div class="sec-name">GPS Geofencing</div>
-        <div class="sec-impl">Employee GPS must fall within polygon boundary — prevents remote or fraudulent check-ins</div>
-      </div>
-      <div class="sec-card">
-        <div class="sec-icon">⏱️</div>
-        <div class="sec-name">Session Timeout</div>
-        <div class="sec-impl">Token expiry automatically redirects to login screen — no stale sessions permitted</div>
-      </div>
-      <div class="sec-card">
-        <div class="sec-icon">🚪</div>
-        <div class="sec-name">Device Registration Gate</div>
-        <div class="sec-impl">All new devices require admin approval before account activation — prevents unauthorized access</div>
-      </div>
-      <div class="sec-card">
-        <div class="sec-icon">🔑</div>
-        <div class="sec-name">No Hardcoded Credentials</div>
-        <div class="sec-impl">All credentials entered at runtime — nothing stored in source code or build artifacts</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══════════ ROADMAP ═══════════ -->
-  <div class="panel" id="panel-roadmap">
-    <div class="panel-title">Development Roadmap</div>
-    <div class="panel-desc">Four-phase improvement plan — from critical bug fixes to advanced analytics.</div>
-
-    <div style="margin-bottom:32px; padding:20px; background:rgba(220,38,38,0.07); border:1px solid rgba(220,38,38,0.25); border-radius:12px;">
-      <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:14px; color:#f87171; margin-bottom:12px;">⚠️ Critical Issues (Address Immediately)</div>
-      <div style="display:flex; flex-direction:column; gap:8px;">
-        <div style="display:flex; align-items:flex-start; gap:10px; font-size:13px; color:rgba(240,246,255,0.7);">
-          <span style="color:#f87171; flex-shrink:0; margin-top:1px;">●</span>Firebase/FCM disabled — push notifications completely non-functional
-        </div>
-        <div style="display:flex; align-items:flex-start; gap:10px; font-size:13px; color:rgba(240,246,255,0.7);">
-          <span style="color:#f87171; flex-shrink:0; margin-top:1px;">●</span>Excel export generates empty files — attendance reporting broken
-        </div>
-        <div style="display:flex; align-items:flex-start; gap:10px; font-size:13px; color:rgba(240,246,255,0.7);">
-          <span style="color:#f87171; flex-shrink:0; margin-top:1px;">●</span>Device token hardcoded to '123' — new registrations cannot receive notifications
-        </div>
-      </div>
-    </div>
-
-    <div class="roadmap">
-      <div class="roadmap-phase phase1">
-        <div class="phase-num" style="color:#f87171;">1</div>
-        <div class="phase-content">
-          <div class="phase-title" style="color:#f87171;">Stability</div>
-          <div class="phase-focus">Fix critical blocking bugs</div>
-          <ul class="phase-items">
-            <li class="phase-item">Enable Firebase / FCM</li>
-            <li class="phase-item">Fix Excel export</li>
-            <li class="phase-item">Real device tokens</li>
-            <li class="phase-item">Fix validation bugs</li>
-          </ul>
-        </div>
-      </div>
-      <div class="roadmap-phase phase2">
-        <div class="phase-num" style="color:#fbbf24;">2</div>
-        <div class="phase-content">
-          <div class="phase-title" style="color:#fbbf24;">Completeness</div>
-          <div class="phase-focus">Fill missing features</div>
-          <ul class="phase-items">
-            <li class="phase-item">Full CRUD on admin screens</li>
-            <li class="phase-item">Holidays screen</li>
-            <li class="phase-item">Live leaderboard</li>
-            <li class="phase-item">Localization keys</li>
-          </ul>
-        </div>
-      </div>
-      <div class="roadmap-phase phase3">
-        <div class="phase-num" style="color:#4ade80;">3</div>
-        <div class="phase-content">
-          <div class="phase-title" style="color:#4ade80;">Enhancement</div>
-          <div class="phase-focus">UX & reliability improvements</div>
-          <ul class="phase-items">
-            <li class="phase-item">Offline-first storage</li>
-            <li class="phase-item">Token refresh</li>
-            <li class="phase-item">Biometric login</li>
-            <li class="phase-item">Deep linking</li>
-          </ul>
-        </div>
-      </div>
-      <div class="roadmap-phase phase4">
-        <div class="phase-num" style="color:#60a5fa;">4</div>
-        <div class="phase-content">
-          <div class="phase-title" style="color:#60a5fa;">Analytics</div>
-          <div class="phase-focus">Advanced reporting & insights</div>
-          <ul class="phase-items">
-            <li class="phase-item">Advanced dashboards</li>
-            <li class="phase-item">Attendance analytics</li>
-            <li class="phase-item">Productivity metrics</li>
-            <li class="phase-item">PDF report generation</li>
-          </ul>
-        </div>
-      </div>
+    <div class="legend">
+      <div class="legend-item"><svg width="28" height="18"><ellipse cx="14" cy="9" rx="13" ry="8" fill="#1a1a2e"/></svg>Start / End</div>
+      <div class="legend-item"><svg width="28" height="18"><rect x="2" y="3" width="24" height="12" rx="3" fill="#4361ee"/></svg>System Action</div>
+      <div class="legend-item"><svg width="28" height="18"><polygon points="14,2 26,9 14,16 2,9" fill="#ff4d6d"/></svg>Decision Gate</div>
+      <div class="legend-item"><svg width="28" height="18"><rect x="2" y="3" width="24" height="12" rx="3" fill="#06d6a0"/></svg>Success Path</div>
+      <div class="legend-item"><svg width="28" height="18"><rect x="2" y="3" width="24" height="12" rx="3" fill="#ffe0e6" stroke="#ff4d6d" stroke-width="1.5"/></svg>Error / Block</div>
     </div>
   </div>
 
-  <footer>
-    Check Point v1.0.1 — Systm Gulf Development Team — Internal Use Only
-  </footer>
+  <!-- ════════════════════════════════════════
+       FLOW 3: LEAVE MANAGEMENT
+  ════════════════════════════════════════ -->
+  <div class="flow-panel" id="flow-leave">
+    <div class="flow-header">
+      <div class="flow-number">03</div>
+      <div class="flow-title-block">
+        <div class="flow-title">Leave Management Flow</div>
+        <div class="flow-subtitle">Employee submission → Supervisor decision → Calendar update</div>
+      </div>
+    </div>
+    <div class="diagram-svg-wrap">
+      <svg width="960" height="700" viewBox="0 0 960 700" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr3" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#1a1a2e"/>
+          </marker>
+          <marker id="arr3g" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#06d6a0"/>
+          </marker>
+          <marker id="arr3r" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#ff4d6d"/>
+          </marker>
+        </defs>
+
+        <!-- Employee badge area -->
+        <rect x="60" y="20" width="300" height="660" rx="12" fill="rgba(6,214,160,0.06)" stroke="#06d6a0" stroke-width="2" stroke-dasharray="6,4"/>
+        <text x="210" y="46" font-family="'Bebas Neue',sans-serif" font-size="14" fill="#06d6a0" letter-spacing="2" text-anchor="middle">EMPLOYEE</text>
+
+        <rect x="630" y="20" width="300" height="660" rx="12" fill="rgba(123,45,139,0.06)" stroke="#7b2d8b" stroke-width="2" stroke-dasharray="6,4"/>
+        <text x="780" y="46" font-family="'Bebas Neue',sans-serif" font-size="14" fill="#7b2d8b" letter-spacing="2" text-anchor="middle">SUPERVISOR</text>
+
+        <!-- Start -->
+        <g class="node">
+          <ellipse cx="210" cy="90" rx="100" ry="28" fill="#1a1a2e"/>
+          <text x="210" y="90" fill="white">Submit Leave Request</text>
+        </g>
+        <line x1="210" y1="118" x2="210" y2="150" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr3)"/>
+
+        <!-- Form fields -->
+        <g class="node">
+          <rect x="90" y="150" width="240" height="80" rx="8" fill="#06d6a0" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="210" y="178">📅  Start & End Date</text>
+          <text x="210" y="198" class="small">📝  Reason (max 200 chars)</text>
+          <text x="210" y="215" class="small">💬  Remark (optional)</text>
+        </g>
+        <line x1="210" y1="230" x2="210" y2="262" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr3)"/>
+
+        <!-- Status: PENDING -->
+        <g class="node">
+          <rect x="100" y="262" width="220" height="48" rx="8" fill="#fcbf49" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="210" y="286">🟡  Status: PENDING</text>
+        </g>
+
+        <!-- Can delete? -->
+        <line x1="210" y1="310" x2="210" y2="345" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr3)"/>
+        <g class="node">
+          <polygon points="210,345 300,378 210,411 120,378" fill="#f77f00" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="210" y="371" fill="white" font-size="12">Delete</text>
+          <text x="210" y="386" fill="white" font-size="12">Request?</text>
+        </g>
+        <!-- YES delete -->
+        <line x1="120" y1="378" x2="60" y2="378" stroke="#f77f00" stroke-width="2" marker-end="url(#arr3)"/>
+        <g class="node">
+          <rect x="-60" y="355" width="120" height="46" rx="8" fill="#fff3e0" stroke="#f77f00" stroke-width="2"/>
+          <text x="0" y="374" class="small">🗑️  Deleted</text>
+          <text x="0" y="390" class="small">End Flow</text>
+        </g>
+        <!-- NO continue -->
+        <text x="215" y="418" class="small">NO</text>
+        <line x1="210" y1="411" x2="210" y2="445" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr3)"/>
+
+        <!-- System notifies -->
+        <g class="node">
+          <rect x="380" y="262" width="200" height="48" rx="8" fill="#118ab2" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="480" y="286" fill="white">🔔  System Notifies</text>
+        </g>
+        <!-- Arrow from pending to notify -->
+        <line x1="320" y1="286" x2="380" y2="286" stroke="#1a1a2e" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arr3)"/>
+
+        <!-- Arrow from notify to supervisor -->
+        <line x1="580" y1="286" x2="630" y2="286" stroke="#1a1a2e" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arr3)"/>
+
+        <!-- Supervisor Reviews -->
+        <g class="node">
+          <ellipse cx="780" cy="90" rx="110" ry="28" fill="#7b2d8b"/>
+          <text x="780" y="90" fill="white">Supervisor Reviews</text>
+        </g>
+
+        <g class="node">
+          <rect x="650" y="150" width="260" height="80" rx="8" fill="#f5e6fa" stroke="#7b2d8b" stroke-width="2.5"/>
+          <text x="780" y="175">🔍  Reviews: Dates</text>
+          <text x="780" y="195" class="small">   Reason & Team Schedule</text>
+          <text x="780" y="212" class="small">   Target: &lt; 24 hours</text>
+        </g>
+        <line x1="780" y1="230" x2="780" y2="262" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr3)"/>
+        <line x1="780" y1="150" x2="780" y2="118" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr3)"/>
+
+        <!-- Decision -->
+        <g class="node">
+          <polygon points="780,310 880,350 780,390 680,350" fill="#7b2d8b" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="780" y="343" fill="white">Approve?</text>
+          <text x="780" y="358" fill="white" font-size="11"></text>
+        </g>
+        <line x1="780" y1="262" x2="780" y2="310" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr3)"/>
+
+        <!-- APPROVED -->
+        <line x1="780" y1="390" x2="780" y2="430" stroke="#06d6a0" stroke-width="2.5" marker-end="url(#arr3g)"/>
+        <text x="792" y="415" class="small" fill="#06d6a0">YES</text>
+        <g class="node">
+          <rect x="650" y="430" width="260" height="50" rx="8" fill="#d4fce9" stroke="#06d6a0" stroke-width="2.5"/>
+          <text x="780" y="455" fill="#065f36">✅  Status: APPROVED</text>
+        </g>
+        <line x1="780" y1="480" x2="780" y2="510" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arr3)"/>
+        <g class="node">
+          <rect x="650" y="510" width="260" height="50" rx="8" fill="#e8f4fd" stroke="#118ab2" stroke-width="2"/>
+          <text x="780" y="532" class="small" fill="#1a1a2e">📅  Added to Leave Planner</text>
+          <text x="780" y="548" class="small" fill="#1a1a2e">📋  Added to Leave Schedule</text>
+        </g>
+
+        <!-- REJECTED -->
+        <line x1="880" y1="350" x2="940" y2="350" stroke="#ff4d6d" stroke-width="2.5"/>
+        <line x1="940" y1="350" x2="940" y2="480" stroke="#ff4d6d" stroke-width="2.5" marker-end="url(#arr3r)"/>
+        <text x="882" y="342" class="small" fill="#ff4d6d">NO</text>
+        <g class="node">
+          <rect x="865" y="480" width="150" height="50" rx="8" fill="#ffe0e6" stroke="#ff4d6d" stroke-width="2"/>
+          <text x="940" y="502" fill="#c0002a">❌  Status:</text>
+          <text x="940" y="518" fill="#c0002a">REJECTED</text>
+        </g>
+
+        <!-- Employee view status -->
+        <g class="node">
+          <rect x="90" y="445" width="240" height="50" rx="8" fill="#ffecd1" stroke="#1a1a2e" stroke-width="2"/>
+          <text x="210" y="467">👁️  Employee Views Status</text>
+          <text x="210" y="483" class="small">My Leave Requests Screen</text>
+        </g>
+        <!-- Arrow from approved to employee view -->
+        <line x1="650" y1="455" x2="330" y2="455" stroke="#1a1a2e" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arr3)"/>
+
+        <!-- END -->
+        <g class="node">
+          <ellipse cx="210" cy="590" rx="100" ry="28" fill="#1a1a2e"/>
+          <text x="210" y="590" fill="white">Flow Complete</text>
+        </g>
+        <line x1="210" y1="495" x2="210" y2="562" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr3)"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       FLOW 4: TASK MANAGEMENT
+  ════════════════════════════════════════ -->
+  <div class="flow-panel" id="flow-tasks">
+    <div class="flow-header">
+      <div class="flow-number">04</div>
+      <div class="flow-title-block">
+        <div class="flow-title">Task Management Flow</div>
+        <div class="flow-subtitle">Supervisor creates → Assigns to employee → Status tracked to completion</div>
+      </div>
+    </div>
+    <div class="diagram-svg-wrap">
+      <svg width="960" height="680" viewBox="0 0 960 680" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr4" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#1a1a2e"/>
+          </marker>
+        </defs>
+
+        <!-- Lane backgrounds -->
+        <rect x="60" y="20" width="400" height="640" rx="12" fill="rgba(123,45,139,0.06)" stroke="#7b2d8b" stroke-width="2" stroke-dasharray="6,4"/>
+        <text x="260" y="46" font-family="'Bebas Neue',sans-serif" font-size="14" fill="#7b2d8b" letter-spacing="2" text-anchor="middle">SUPERVISOR</text>
+
+        <rect x="500" y="20" width="430" height="640" rx="12" fill="rgba(6,214,160,0.06)" stroke="#06d6a0" stroke-width="2" stroke-dasharray="6,4"/>
+        <text x="715" y="46" font-family="'Bebas Neue',sans-serif" font-size="14" fill="#06d6a0" letter-spacing="2" text-anchor="middle">EMPLOYEE</text>
+
+        <!-- Supervisor: Create Task -->
+        <g class="node">
+          <ellipse cx="260" cy="90" rx="110" ry="28" fill="#7b2d8b"/>
+          <text x="260" y="90" fill="white">Create New Task</text>
+        </g>
+        <line x1="260" y1="118" x2="260" y2="150" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr4)"/>
+
+        <!-- Task Form -->
+        <g class="node">
+          <rect x="110" y="150" width="300" height="100" rx="8" fill="#f5e6fa" stroke="#7b2d8b" stroke-width="2.5"/>
+          <text x="260" y="178">📝  Task Details</text>
+          <text x="260" y="200" class="small">Title · Description</text>
+          <text x="260" y="218" class="small">Due Date · Priority (High/Med/Low)</text>
+          <text x="260" y="236" class="small">Assign to: one or more employees</text>
+        </g>
+        <line x1="260" y1="250" x2="260" y2="282" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr4)"/>
+
+        <!-- Task Created: PENDING -->
+        <g class="node">
+          <rect x="130" y="282" width="260" height="50" rx="8" fill="#fcbf49" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="260" y="307">🟡  Task Status: PENDING</text>
+        </g>
+
+        <!-- Manage tasks block -->
+        <line x1="260" y1="332" x2="260" y2="450" stroke="#1a1a2e" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arr4)"/>
+        <g class="node">
+          <rect x="100" y="450" width="300" height="100" rx="8" fill="#ffecd1" stroke="#f77f00" stroke-width="2"/>
+          <text x="260" y="476">✏️  Supervisor Can:</text>
+          <text x="260" y="496" class="small">Edit: Title, Desc, Date, Priority</text>
+          <text x="260" y="514" class="small">Delete with confirmation prompt</text>
+          <text x="260" y="532" class="small">View team Leaderboard</text>
+        </g>
+
+        <!-- Cross-lane arrow: Task assigned to employee -->
+        <line x1="390" y1="307" x2="520" y2="307" stroke="#1a1a2e" stroke-width="2.5" stroke-dasharray="6,4" marker-end="url(#arr4)"/>
+        <text x="430" y="299" class="small">assigned</text>
+
+        <!-- Employee receives task -->
+        <g class="node">
+          <ellipse cx="715" cy="90" rx="110" ry="28" fill="#06d6a0"/>
+          <text x="715" y="90">Employee Views Task</text>
+        </g>
+        <g class="node">
+          <rect x="545" y="150" width="340" height="80" rx="8" fill="#d4fce9" stroke="#06d6a0" stroke-width="2.5"/>
+          <text x="715" y="178">📋  Sees: Title, Description</text>
+          <text x="715" y="198" class="small">Due Date · Priority badge · Status</text>
+          <text x="715" y="215" class="small">Assigned by supervisor</text>
+        </g>
+        <line x1="715" y1="118" x2="715" y2="150" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr4)"/>
+
+        <!-- Employee connects to receive -->
+        <line x1="520" y1="307" x2="715" y2="307" stroke="#1a1a2e" stroke-width="2" stroke-dasharray="5,4"/>
+        <line x1="715" y1="230" x2="715" y2="282" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr4)"/>
+
+        <!-- Updates to In Progress -->
+        <g class="node">
+          <rect x="545" y="282" width="340" height="50" rx="8" fill="#4361ee" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="715" y="307" fill="white">🔵  Update: IN PROGRESS</text>
+        </g>
+        <line x1="715" y1="332" x2="715" y2="370" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr4)"/>
+
+        <!-- Work on task -->
+        <g class="node">
+          <rect x="545" y="370" width="340" height="60" rx="8" fill="#e8f4fd" stroke="#118ab2" stroke-width="2"/>
+          <text x="715" y="395">💼  Employee Works on Task</text>
+          <text x="715" y="413" class="small">Progress tracked · Deadline visible</text>
+        </g>
+        <line x1="715" y1="430" x2="715" y2="465" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr4)"/>
+
+        <!-- Completed -->
+        <g class="node">
+          <rect x="545" y="465" width="340" height="50" rx="8" fill="#06d6a0" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="715" y="490">✅  Update: COMPLETED</text>
+        </g>
+        <line x1="715" y1="515" x2="715" y2="548" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr4)"/>
+
+        <!-- END -->
+        <g class="node">
+          <ellipse cx="715" cy="590" rx="120" ry="28" fill="#1a1a2e"/>
+          <text x="715" y="590" fill="#fcbf49">🏆  Reflected in Leaderboard</text>
+        </g>
+
+        <!-- Status Flow Key -->
+        <rect x="100" y="590" width="310" height="55" rx="8" fill="rgba(255,255,255,0.6)" stroke="#1a1a2e" stroke-width="1.5"/>
+        <text x="118" y="612" class="small" font-weight="700">STATUS FLOW:</text>
+        <rect x="118" y="622" width="60" height="16" rx="3" fill="#fcbf49"/>
+        <text x="148" y="630" class="small" font-size="10">PENDING</text>
+        <text x="182" y="630" class="small">→</text>
+        <rect x="190" y="622" width="80" height="16" rx="3" fill="#4361ee"/>
+        <text x="230" y="630" class="small" fill="white" font-size="10">IN PROGRESS</text>
+        <text x="274" y="630" class="small">→</text>
+        <rect x="282" y="622" width="78" height="16" rx="3" fill="#06d6a0"/>
+        <text x="321" y="630" class="small" font-size="10">COMPLETED</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       FLOW 5: CLAIMS & INCIDENTS
+  ════════════════════════════════════════ -->
+  <div class="flow-panel" id="flow-claims">
+    <div class="flow-header">
+      <div class="flow-number">05</div>
+      <div class="flow-title-block">
+        <div class="flow-title">Claims & Incident Reporting</div>
+        <div class="flow-subtitle">Expense claims and workplace incidents — parallel supervisor review flows</div>
+      </div>
+    </div>
+    <div class="diagram-svg-wrap">
+      <svg width="960" height="620" viewBox="0 0 960 620" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr5" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#1a1a2e"/>
+          </marker>
+          <marker id="arr5g" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#06d6a0"/>
+          </marker>
+          <marker id="arr5r" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#ff4d6d"/>
+          </marker>
+        </defs>
+
+        <!-- TWO PARALLEL FLOWS SIDE BY SIDE -->
+        <!-- LEFT: EXPENSE CLAIMS -->
+        <rect x="30" y="10" width="420" height="590" rx="12" fill="rgba(252,191,73,0.07)" stroke="#fcbf49" stroke-width="2" stroke-dasharray="6,4"/>
+        <text x="240" y="36" font-family="'Bebas Neue',sans-serif" font-size="16" fill="#f77f00" letter-spacing="3" text-anchor="middle">💰  EXPENSE CLAIMS</text>
+
+        <!-- RIGHT: INCIDENT REPORTS -->
+        <rect x="510" y="10" width="420" height="590" rx="12" fill="rgba(255,77,109,0.06)" stroke="#ff4d6d" stroke-width="2" stroke-dasharray="6,4"/>
+        <text x="720" y="36" font-family="'Bebas Neue',sans-serif" font-size="16" fill="#ff4d6d" letter-spacing="3" text-anchor="middle">🚨  INCIDENT REPORTS</text>
+
+        <!-- CLAIMS FLOW -->
+        <g class="node">
+          <ellipse cx="240" cy="80" rx="120" ry="28" fill="#f77f00"/>
+          <text x="240" y="80" fill="white">Employee Submits Claim</text>
+        </g>
+        <line x1="240" y1="108" x2="240" y2="140" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr5)"/>
+
+        <g class="node">
+          <rect x="100" y="140" width="280" height="70" rx="8" fill="#fff8e8" stroke="#f77f00" stroke-width="2.5"/>
+          <text x="240" y="165">📄  Claim Details</text>
+          <text x="240" y="183" class="small">Amount · Description</text>
+          <text x="240" y="199" class="small">Supporting documents / notes</text>
+        </g>
+        <line x1="240" y1="210" x2="240" y2="242" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr5)"/>
+
+        <g class="node">
+          <rect x="110" y="242" width="260" height="48" rx="8" fill="#fcbf49" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="240" y="266">🟡  Status: PENDING</text>
+        </g>
+        <line x1="240" y1="290" x2="240" y2="328" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr5)"/>
+
+        <g class="node">
+          <polygon points="240,328 340,365 240,402 140,365" fill="#7b2d8b" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="240" y="358" fill="white">Supervisor</text>
+          <text x="240" y="373" fill="white">Approves?</text>
+        </g>
+
+        <!-- YES -->
+        <line x1="240" y1="402" x2="240" y2="435" stroke="#06d6a0" stroke-width="2.5" marker-end="url(#arr5g)"/>
+        <text x="252" y="422" class="small" fill="#06d6a0">YES</text>
+        <g class="node">
+          <rect x="100" y="435" width="280" height="48" rx="8" fill="#d4fce9" stroke="#06d6a0" stroke-width="2.5"/>
+          <text x="240" y="459" fill="#065f36">✅  Claim Approved</text>
+        </g>
+        <line x1="240" y1="483" x2="240" y2="518" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arr5)"/>
+        <g class="node">
+          <rect x="100" y="518" width="280" height="48" rx="8" fill="#e8f4fd" stroke="#118ab2" stroke-width="2"/>
+          <text x="240" y="542" class="small">📊  Recorded for HR Processing</text>
+        </g>
+
+        <!-- NO -->
+        <line x1="340" y1="365" x2="410" y2="365" stroke="#ff4d6d" stroke-width="2.5"/>
+        <line x1="410" y1="365" x2="410" y2="460" stroke="#ff4d6d" stroke-width="2.5" marker-end="url(#arr5r)"/>
+        <text x="345" y="358" class="small" fill="#ff4d6d">NO</text>
+        <g class="node">
+          <rect x="330" y="460" width="100" height="48" rx="8" fill="#ffe0e6" stroke="#ff4d6d" stroke-width="2"/>
+          <text x="380" y="481" fill="#c0002a">❌ Rejected</text>
+          <text x="380" y="497" class="small" fill="#c0002a">Resubmit?</text>
+        </g>
+
+        <!-- INCIDENT FLOW -->
+        <g class="node">
+          <ellipse cx="720" cy="80" rx="120" ry="28" fill="#ff4d6d"/>
+          <text x="720" y="80" fill="white">Employee Reports Incident</text>
+        </g>
+        <line x1="720" y1="108" x2="720" y2="140" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr5)"/>
+
+        <g class="node">
+          <rect x="570" y="140" width="300" height="70" rx="8" fill="#ffe8ed" stroke="#ff4d6d" stroke-width="2.5"/>
+          <text x="720" y="165">🚨  Incident Details</text>
+          <text x="720" y="183" class="small">Description · Date & Time</text>
+          <text x="720" y="199" class="small">People involved · Location</text>
+        </g>
+        <line x1="720" y1="210" x2="720" y2="248" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr5)"/>
+
+        <!-- System records -->
+        <g class="node">
+          <rect x="570" y="248" width="300" height="48" rx="8" fill="#118ab2" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="720" y="272" fill="white">📋  System Records Incident</text>
+        </g>
+        <line x1="720" y1="296" x2="720" y2="328" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr5)"/>
+
+        <!-- Supervisor Notified -->
+        <g class="node">
+          <rect x="570" y="328" width="300" height="48" rx="8" fill="#f5e6fa" stroke="#7b2d8b" stroke-width="2.5"/>
+          <text x="720" y="352" fill="#7b2d8b">🔔  Supervisor Notified</text>
+        </g>
+        <line x1="720" y1="376" x2="720" y2="408" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr5)"/>
+
+        <!-- Supervisor Reviews -->
+        <g class="node">
+          <rect x="570" y="408" width="300" height="70" rx="8" fill="#7b2d8b" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="720" y="435" fill="white">👔  Supervisor Reviews</text>
+          <text x="720" y="455" class="small" fill="#e9d5f5">Assesses severity · Documents</text>
+          <text x="720" y="471" class="small" fill="#e9d5f5">Takes corrective action</text>
+        </g>
+        <line x1="720" y1="478" x2="720" y2="510" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr5)"/>
+
+        <!-- END -->
+        <g class="node">
+          <rect x="570" y="510" width="300" height="48" rx="8" fill="#1a1a2e" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="720" y="534" fill="#fcbf49">📁  Incident Closed / Archived</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       FLOW 6: ADMIN MANAGEMENT
+  ════════════════════════════════════════ -->
+  <div class="flow-panel" id="flow-admin">
+    <div class="flow-header">
+      <div class="flow-number">06</div>
+      <div class="flow-title-block">
+        <div class="flow-title">Admin Management Flow</div>
+        <div class="flow-subtitle">Full system control — employees, branches, shifts, and organizational setup</div>
+      </div>
+    </div>
+    <div class="diagram-svg-wrap">
+      <svg width="960" height="740" viewBox="0 0 960 740" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr6" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#1a1a2e"/>
+          </marker>
+          <marker id="arr6g" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#06d6a0"/>
+          </marker>
+          <marker id="arr6r" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#ff4d6d"/>
+          </marker>
+        </defs>
+
+        <!-- Admin Login -->
+        <g class="node">
+          <ellipse cx="480" cy="45" rx="130" ry="30" fill="#ff4d6d"/>
+          <text x="480" y="45" fill="white">🛡️  Admin Dashboard</text>
+        </g>
+        <line x1="480" y1="75" x2="480" y2="108" stroke="#1a1a2e" stroke-width="2.5" marker-end="url(#arr6)"/>
+
+        <!-- Hub -->
+        <g class="node">
+          <rect x="280" y="108" width="400" height="52" rx="8" fill="#1a1a2e" stroke="#ff4d6d" stroke-width="3"/>
+          <text x="480" y="134" fill="#fcbf49">Select Management Area</text>
+        </g>
+
+        <!-- 6 branches from hub -->
+        <!-- Branch lines -->
+        <line x1="320" y1="160" x2="120" y2="215" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arr6)"/>
+        <line x1="380" y1="160" x2="280" y2="215" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arr6)"/>
+        <line x1="440" y1="160" x2="440" y2="215" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arr6)"/>
+        <line x1="520" y1="160" x2="520" y2="215" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arr6)"/>
+        <line x1="580" y1="160" x2="680" y2="215" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arr6)"/>
+        <line x1="640" y1="160" x2="840" y2="215" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arr6)"/>
+
+        <!-- 6 management area nodes -->
+        <!-- 1: Employees -->
+        <g class="node">
+          <rect x="30" y="215" width="180" height="52" rx="8" fill="#ff4d6d" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="120" y="241" fill="white">👥  Employees</text>
+        </g>
+        <!-- 2: Departments -->
+        <g class="node">
+          <rect x="195" y="215" width="180" height="52" rx="8" fill="#f77f00" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="285" y="241" fill="white">🏢  Departments</text>
+        </g>
+        <!-- 3: Shifts -->
+        <g class="node">
+          <rect x="360" y="215" width="155" height="52" rx="8" fill="#fcbf49" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="437" y="241">⏰  Shifts</text>
+        </g>
+        <!-- 4: Branches -->
+        <g class="node">
+          <rect x="445" y="215" width="155" height="52" rx="8" fill="#06d6a0" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="522" y="241">📍  Branches</text>
+        </g>
+        <!-- 5: Clients/Sites -->
+        <g class="node">
+          <rect x="612" y="215" width="155" height="52" rx="8" fill="#4361ee" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="689" y="241" fill="white">🏪  Clients / Sites</text>
+        </g>
+        <!-- 6: Notifications -->
+        <g class="node">
+          <rect x="782" y="215" width="155" height="52" rx="8" fill="#7b2d8b" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="859" y="241" fill="white">🔔  Notifications</text>
+        </g>
+
+        <!-- CRUD actions below each -->
+        <!-- Employees CRUD -->
+        <line x1="120" y1="267" x2="120" y2="300" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arr6)"/>
+        <g class="node">
+          <rect x="30" y="300" width="180" height="90" rx="8" fill="#ffe8ed" stroke="#ff4d6d" stroke-width="2"/>
+          <text x="120" y="326" class="small">➕  Create account</text>
+          <text x="120" y="344" class="small">✏️  Edit details</text>
+          <text x="120" y="362" class="small">🗑️  Delete account</text>
+          <text x="120" y="380" class="small">🔍  Search / filter</text>
+        </g>
+
+        <!-- Departments CRUD -->
+        <line x1="285" y1="267" x2="285" y2="300" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arr6)"/>
+        <g class="node">
+          <rect x="195" y="300" width="180" height="90" rx="8" fill="#fff3e0" stroke="#f77f00" stroke-width="2"/>
+          <text x="285" y="326" class="small">➕  Create dept</text>
+          <text x="285" y="344" class="small">✏️  Edit dept name</text>
+          <text x="285" y="362" class="small">🗑️  Delete dept</text>
+          <text x="285" y="380" class="small">👤  Assign employees</text>
+        </g>
+
+        <!-- Shifts CRUD -->
+        <line x1="437" y1="267" x2="437" y2="300" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arr6)"/>
+        <g class="node">
+          <rect x="360" y="300" width="155" height="75" rx="8" fill="#fffbea" stroke="#fcbf49" stroke-width="2"/>
+          <text x="437" y="326" class="small">➕  Create shift</text>
+          <text x="437" y="344" class="small">⚙️  Define policies</text>
+          <text x="437" y="362" class="small">🕐  Set clock times</text>
+        </g>
+
+        <!-- Branches CRUD -->
+        <line x1="522" y1="267" x2="522" y2="300" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arr6)"/>
+        <g class="node">
+          <rect x="445" y="300" width="155" height="75" rx="8" fill="#e8faf4" stroke="#06d6a0" stroke-width="2"/>
+          <text x="522" y="326" class="small">➕  Add branch</text>
+          <text x="522" y="344" class="small">📍  Set GPS coords</text>
+          <text x="522" y="362" class="small">🔷  Draw geofence</text>
+        </g>
+
+        <!-- Clients CRUD -->
+        <line x1="689" y1="267" x2="689" y2="300" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arr6)"/>
+        <g class="node">
+          <rect x="612" y="300" width="155" height="75" rx="8" fill="#eef0fd" stroke="#4361ee" stroke-width="2"/>
+          <text x="689" y="326" class="small">➕  Add client</text>
+          <text x="689" y="344" class="small">📍  Add site</text>
+          <text x="689" y="362" class="small">🔗  Link to employees</text>
+        </g>
+
+        <!-- Notifications -->
+        <line x1="859" y1="267" x2="859" y2="300" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arr6)"/>
+        <g class="node">
+          <rect x="782" y="300" width="155" height="75" rx="8" fill="#f5e6fa" stroke="#7b2d8b" stroke-width="2"/>
+          <text x="859" y="326" class="small">📢  Broadcast msg</text>
+          <text x="859" y="344" class="small">👥  Target all users</text>
+          <text x="859" y="362" class="small">🔔  Push via FCM</text>
+        </g>
+
+        <!-- Special: Account Requests flow -->
+        <rect x="200" y="440" width="560" height="150" rx="12" fill="rgba(255,77,109,0.07)" stroke="#ff4d6d" stroke-width="2"/>
+        <text x="480" y="466" font-family="'Bebas Neue',sans-serif" font-size="15" fill="#ff4d6d" letter-spacing="2" text-anchor="middle">ACCOUNT REQUEST APPROVAL</text>
+
+        <g class="node">
+          <rect x="220" y="478" width="160" height="48" rx="8" fill="#ffecd1" stroke="#f77f00" stroke-width="2"/>
+          <text x="300" y="502" class="small">🔔  New Request</text>
+          <text x="300" y="518" class="small">Badge on Dashboard</text>
+        </g>
+        <line x1="380" y1="502" x2="415" y2="502" stroke="#1a1a2e" stroke-width="2" marker-end="url(#arr6)"/>
+
+        <g class="node">
+          <polygon points="480,480 560,502 480,524 400,502" fill="#ff4d6d" stroke="#1a1a2e" stroke-width="2.5"/>
+          <text x="480" y="496" fill="white" font-size="11">Approve</text>
+          <text x="480" y="510" fill="white" font-size="11">Device?</text>
+        </g>
+
+        <!-- Approved -->
+        <line x1="560" y1="502" x2="620" y2="502" stroke="#06d6a0" stroke-width="2.5" marker-end="url(#arr6g)"/>
+        <text x="575" y="496" class="small" fill="#06d6a0">YES</text>
+        <g class="node">
+          <rect x="620" y="478" width="120" height="48" rx="8" fill="#d4fce9" stroke="#06d6a0" stroke-width="2"/>
+          <text x="680" y="498" fill="#065f36" class="small">✅ Account</text>
+          <text x="680" y="514" fill="#065f36" class="small">Activated</text>
+        </g>
+
+        <!-- Rejected -->
+        <line x1="480" y1="524" x2="480" y2="560" stroke="#ff4d6d" stroke-width="2.5" marker-end="url(#arr6r)"/>
+        <text x="492" y="546" class="small" fill="#ff4d6d">NO</text>
+        <g class="node">
+          <rect x="390" y="560" width="180" height="20" rx="4" fill="#ffe0e6" stroke="#ff4d6d" stroke-width="1.5"/>
+          <text x="480" y="570" class="small" fill="#c0002a">❌  Request Rejected</text>
+        </g>
+
+        <!-- END -->
+        <g class="node">
+          <ellipse cx="480" cy="680" rx="160" ry="30" fill="#1a1a2e"/>
+          <text x="480" y="680" fill="#fcbf49">System Updated · All Changes Saved</text>
+        </g>
+        <line x1="480" y1="600" x2="480" y2="650" stroke="#1a1a2e" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arr6)"/>
+      </svg>
+    </div>
+  </div>
 
 </div>
 
 <script>
-  function show(id) {
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('panel-' + id).classList.add('active');
-    event.target.classList.add('active');
-  }
+function showFlow(id, btn) {
+  document.querySelectorAll('.flow-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.flow-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('flow-' + id).classList.add('active');
+  btn.classList.add('active');
+}
 </script>
 </body>
 </html>
